@@ -11,24 +11,14 @@ def ParseGeneFile(file_path):
     return data
 
 
-def Transform_To_Result_Format(Data):
-    result_dict = {}
-    for key, value in Data.items():
-        if value not in result_dict:
-            result_dict[value] = [key]  # 如果值不在字典中，則將值作為鍵，對應的鍵作為列表的值
-        else:
-            result_dict[value].append(key)
-    return result_dict
 
 
 path = "c_elegans.PRJNA13758.WS289.mRNA_transcripts.fa"
 GeneData = ParseGeneFile(path)
-ResultData = Transform_To_Result_Format(GeneData)
-SortedData = dict(sorted(ResultData.items(), key=lambda item: len(item[1]), reverse=True))
+
 
 output_frame : pd.DataFrame = pd.DataFrame(columns=["Gene_ID", "transcript_ID", "# of transcripts"])
 
-for keys, values in SortedData.items():
-    output_frame.loc[len(output_frame)] = {"Gene_ID" : keys, "transcript_ID" : values, "# of transcripts" : str(len(values))}
+print(1)
 
-output_frame.to_csv("hw1_output.csv", index= False)
+# test github
