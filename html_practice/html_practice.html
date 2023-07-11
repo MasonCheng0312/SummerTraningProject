@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!--宣告檔案類型為html-->
+
+<html>
+    <!--html的架構是由標籤層層包覆而成。-->
+
+    <head>
+        <meta charset="UTF-8"/>
+        <!--此行設定了網頁所使用的編碼方式，如需使用中文則必須使用UTF-8-->
+        <meta name="auther" content="小黑" />
+        <meta name="description" content="html學習筆記" />
+        <meta name="viewport" content="width = device-width, initial-scale = 1.0" />
+        <title>網頁名稱</title>
+        <!--title標籤用於設置網頁的名稱-->
+
+    </head>
+
+    <body>
+        <!--基本標籤介紹-->
+        <h3>標題設置</h3>
+        <!--此欄位可從h1~h6，數字越小字體越大-->
+        <!--一般而言標題的字體大小會代表標題的重要性，故h1標題通常只會有一個-->
+
+        <h4>第一點</h4>
+        <p>第一點的內容</p>
+
+        <br/> <!--因為我們不會在br標籤中間加入內容，所以直接在後面加入斜線即可。-->
+        <br/> <!--br標籤是換行符號，多個使用會增加空的行數。-->
+        <hr/> <!--hr標籤是添加水平線。-->
+        <h4>第二點</h4>
+        <p> <b>第二點的內容(粗體)</b> <i>第二點的內容(斜體)</i> <i><b>第二點的內容(粗體+斜體)</b></i> </p>
+
+        <!--可以利用p標籤來幫標題加入文字內容-->
+        <!--可以利用b標籤來加粗字體-->
+        <!--可以利用i標籤來傾斜字體-->
+        <!--注意html的運行是由上到下的架構，故排列順序會影響網頁的呈現-->
+
+        
+        <!--網址＆圖片-->
+        <hr/>
+        <a href="https://google.com">google網站</a>
+        <!--利用a標籤可以添加連結，需設定href屬性，並將想要顯示的文字放在角括號中間。-->
+
+        <a href="page2.html">自訂html檔案</a>
+        <a href="hamu.jpg">圖片</a>
+        <!--亦可以利用href屬性連結到自己的其他html檔案或者圖片檔。-->
+
+        <img src="hamu.jpg"/>
+        <!--使用img標籤是直接將圖片顯示於網站上。-->
+        <!--亦可以在網路上找到圖片後將網址貼給src。-->
+        <!--可以利用height,width兩個參數來直接設定圖片顯示的大小。-->
+        <!--若只給定其中一個參數，則另一個參數會被等比例縮小(放大)。-->
+
+        <!--影片-->
+        <hr/>
+        <img src="test.mp4" controls>瀏覽器顯示失敗</video>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/B3QQAjm3Aac" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <!--想要嵌入yt的影片的話就直接到該影片下方按分享，點嵌入後整段複製貼上即可。-->
+        
+        <!--列表＆表格-->
+        <hr/>
+        <ul>
+            <li>google</li>
+            <li>facebook</li>
+            <li>twitter</li>
+        </ul>
+        <!--使用ul標籤新增列表，並用li標籤新增列表內容。-->
+        <!--如果希望列表的最前面可以使用數字或字母編號，則可以將ul標籤更改為ol標籤，並給予不同type屬性。-->
+        <ol>
+            <li>google</li>
+            <li>facebook</li>
+        </ol>
+
+        <ol type="A">
+            <li>google</li>
+            <li>facebook</li>
+        </ol>
+
+        <table width = "300">
+            <tr>
+                <td>數學</td>
+                <td>英文</td>
+                <td>國文</td>
+            </tr>
+            <tr>
+                <td>100</td>
+                <td>90</td>
+                <td>80</td>
+            </tr>
+            <!--每一列都需要用一個tr標籤來建立，其中的每一行內容則由td標籤建立。-->
+            <!--最外層則是一個table標籤。-->
+        </table>
+
+        <!--html的容器 div & span-->
+        <div style = "color: aqua;">
+            <ol type="A">
+                <li>google</li>
+                <li>facebook</li>
+            </ol>
+    
+            <table width = "300">
+                <tr>
+                    <td>數學</td>
+                    <td>英文</td>
+                    <td>國文</td>
+                </tr>
+                <tr>
+                    <td>100</td>
+                    <td>90</td>
+                    <td>80</td>
+                </tr>
+            </table>
+        </div>
+        <!--div容器的好處是當我們需要用css來美化格式及排版時能夠將容器中的所有屬性一起變更設定。-->
+        
+        <!--觀念：在html中標籤的顯示有兩種，
+            1.寬度多少就顯示多少(如a標籤)，
+            2.不管寬度多少，顯示完一行就直接換行(如p標籤)。-->
+        
+        <span>span1</span>
+        <span>span2</span>
+        <div>div1</div>
+        <div>div2</div>
+        <!--span容器與div容器的差異就在這裡，一般而言div容器較常被使用。-->
+        
+        <!--輸入欄位的建立-->
+        <hr/>
+        <input type="text" placeholder="使用者帳號" />
+        <br/>
+        <br/>
+
+        <input type="password" placeholder="使用者密碼" />
+        <br/>
+        <br/>
+        <label><input type="checkbox">python</label>
+        <br/>
+        <br/>
+        <input type="file" />
+        <br/>
+        <br/>
+        <input type="date" />
+        <br/>
+        <br/>
+        <input type="range" />
+        <br/>
+        <br/>
+
+        <textarea>預設文字</textarea>
+        <!--如須輸入大量文本，則會考慮使用textarea。-->
+
+    </body>
+
+</html>

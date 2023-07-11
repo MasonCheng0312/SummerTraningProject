@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Css練習</title>
+        <!--style標籤教學-->
+        <style>
+            p{
+                color: lightblue;
+                background-color: grey;
+            }
+            h1{
+                color: aquamarine;
+            }
+        </style>
+        <link rel="stylesheet" href="css.css"/>
+        <!--利用link標籤可以引入外部css檔案，達到檔案隔離好處。-->
+
+    </head>
+
+    <body>
+        <div style="color: aquamarine; font-size: 20px;">
+            <h2 style="color: red;">Css教學</h2>
+            <p style="border: 5px dashed black; background-color: lightblue; max-width: 100px;">段落1</p>
+            <!--內層的相同屬性會覆蓋外層的設定，比如此處容器與內容皆有設定color屬性，結果會顯示內容的設定值。-->
+            <!--如需多種格式設定，在分號後再加入其他屬性設定即可。-->
+            <!--border(邊框)的添加需要給予三個屬性(寬度 樣式(舉例:solid:實線,dashed:虛線) 顏色)-->
+            <!--顏色的選定上可以使用名稱 RGB HSL表示法--> 
+        </div>
+
+        <!--padding & margin 教學-->
+        <br/>
+        <hr/>
+        <div style="color: lightcoral;max-width: 250px">
+            <h2>padding & margin練習</h2>
+            <p style="padding: 20px;border: 3px solid black">padding</p>
+            <br/>
+            <p style="margin: 20px;border: 3px solid black">margin</p>
+            <!--padding是內部空間的留白，margin則是外部空間的留白。-->
+            <!--亦可以透過設定來控制僅有想要的方向進行留白。-->
+            <p style="padding-top: 20px;border: 3px solid black">padding-top</p>
+            <p style="margin-left: 20px;border: 3px solid black">margin-left</p>
+            <p style="padding: 20px 30px 40px 50px;border: 3px solid black">padding-set-by-self</p>
+            <p style="padding: 20px ; margin-top: -35px ; border: 3px solid blue">negtive-margin</p>
+            <!--透過直接設定4個參數來客製化自己想要的留白，設定順序為順時針。-->
+            <!--留白正常是向下挪移，那如果值為負數就會是向上跑。-->
+        </div>
+
+        <!--float & dispaly 教學-->
+        <div style="display: block;">
+            <img src="hamu.jpg"/>
+            <p>一段文字內容，未使用float參數，文字會在圖片下方。</p>
+            <br/>
+            <hr/>
+            <img src="hamu.jpg" style="float: left;"/>
+            <p>使用了floatleft，文字出現在圖片右邊。</p>
+        </div>
+
+        <div style="display: block;">
+            <br/>
+            <hr/>
+            <!--列表亦可使用float屬性-->
+            <ul style="float: left; background-color: lightblue; padding: 35px;">
+                <li>首頁</li>
+                <li>部落格</li>
+                <li>關於</li>
+                <li>聯絡我們</li>
+            </ul>
+            <p>一段介紹文字</p>
+            <!--Html有兩種顯示方式，block與inline，具體差別就如同span與的差異，因此透過設定display屬性即可更改想要的排版方式。-->
+        </div>
+        
+        <!--position 教學-->
+        <!--第一種方式，固定定位-->
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>        
+        <h2>位置定位教學(固定定位)</h2>
+        <div style="position: fixed; width: 80px; height: 80px; background-color: blue;"></div>
+        <div style="width: 60px; height: 60px; background-color: red;"></div>
+
+        <br/> 
+        <h2>位置定位教學(相對定位)</h2>
+        <div style="position: relative; top: 10px; width: 80px; height: 80px; background-color: green;"></div>
+        <div style="width: 60px; height: 60px; background-color: lightgreen;"></div>
+
+        <br/> 
+        <h2>位置定位教學(絕對定位)</h2>
+        <div style="position: relative ; padding: 30px; border: 5px solid red;">
+            <div style="padding: 30px; border: 5px solid red;">
+                <div style="position: absolute; top: 0px; right: 0px; width: 20px; height: 40px; background-color: blue;"></div>
+            </div>
+        </div>
+        <!--若僅有內層做定位，外層的border會找不到參考的高度。-->
+        <!--若如上寫法，內層做絕對定位在右上角，外層做相對定位，那麼border就會以內層方塊作為基準參照物。-->
+
+        <!--opacity & border radius 教學-->
+        <h2>opacity教學(透明度)</h2>
+        <p style="position: relative; top: 65px; left: 25px;">你好</p>
+        <div style="opacity: 0.5; border-radius: 15px; width: 80px; height: 80px; background-color: blue;"></div>
+        <!--opacity的值是介於0~1之間。-->
+        <!--border-radius是方框的導角半徑。-->
+
+        <!--class & id 教學-->
+        <h2 id="test_id">class的用法</h2>
+        <p class="food best_set">雞排</p>
+        <p class="food">鹹酥雞</p>
+        <p class="food">四季豆</p>
+        <p class="drink best_set">珍奶</p>
+        <p class="drink">清茶</p>
+        <p class="drink">紅茶</p>
+        <!--使用class標籤可以更好的讓我們使用css檔案來設計網頁格式。-->
+        <!--可同時屬於多個class，只需要在class標籤中以空格隔開即可。-->
+
+    </body>
+</html>

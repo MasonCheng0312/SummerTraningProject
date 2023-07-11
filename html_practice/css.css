@@ -1,0 +1,20 @@
+h2{
+    color: bisque;
+}
+
+.food{
+    color: red;
+}
+
+.drink{
+    color: blue;
+}
+
+.best_set{
+    background-color: chocolate;
+}
+
+#test_id{
+    color: yellow;
+    background-color: grey;
+}
