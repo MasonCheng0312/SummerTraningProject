@@ -43,7 +43,7 @@ class DataName(Enum):
 
 
 def Append_TO_Dataframe(dataframe: pd.DataFrame, data: list[dict[str, tuple[int, int]]], flag: int):
-    for index, data_dict in enumerate(data):
+    for index, data_dict in enumerate(sorted(data, key=lambda x: list(x.values())[0][0])):
         if flag >= 3:
             data_name = str(DataName(flag).name)
         else:
@@ -54,7 +54,6 @@ def Append_TO_Dataframe(dataframe: pd.DataFrame, data: list[dict[str, tuple[int,
         length = endPoint - startPoint + 1
         dataframe.loc[len(dataframe)] = {'名稱': data_name, '起始位置': startPoint, '結束位置': endPoint, '長度': length}
     return dataframe
-
 
 def main():
     Path = "unspliced+UTRTranscriptSequence_Y40B10A.2a.1.fasta" 
@@ -99,7 +98,6 @@ def main():
 
     ExonResult.pop(-2)
     ExonResult.append({str(Exonkey[0]) : (exonLocation[0], exonLocation[1])})
-
     
     IntronResult = IntronResult[1 : -1]
     # intron的第一個是UTR5，最後一個是UTR3，我們不要。
