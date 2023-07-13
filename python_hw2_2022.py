@@ -14,6 +14,11 @@ def Parse_File(file_path: str):
 
 def Split_Upper(data: str):
     pattern = r'[A-Z]+'
+    """ 
+    在正規表達式中 + 稱為「量詞」(quantifier),
+    用於指定前面的模式可以重複出現一次或多次。
+    這意味著模式至少需要匹配一次，但可以重複多次。
+    """
     ExonData = re.findall(pattern, data)
     return ExonData
 
@@ -116,3 +121,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
