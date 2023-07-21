@@ -1,7 +1,7 @@
 import re
 from enum import Enum
 import pandas as pd
-
+import time
 
 def Parse_File(file_path: str):
     data = []
@@ -14,11 +14,6 @@ def Parse_File(file_path: str):
 
 def Split_Upper(data: str):
     pattern = r'[A-Z]+'
-    """ 
-    在正規表達式中 + 稱為「量詞」(quantifier),
-    用於指定前面的模式可以重複出現一次或多次。
-    這意味著模式至少需要匹配一次，但可以重複多次。
-    """
     ExonData = re.findall(pattern, data)
     return ExonData
 
@@ -60,7 +55,9 @@ def Append_TO_Dataframe(dataframe: pd.DataFrame, data: list[dict[str, tuple[int,
         dataframe.loc[len(dataframe)] = {'名稱': data_name, '起始位置': startPoint, '結束位置': endPoint, '長度': length}
     return dataframe
 
+
 def main():
+    start = time.perf_counter()
     Path = "unspliced+UTRTranscriptSequence_Y40B10A.2a.1.fasta" 
     ParseData = Parse_File(Path)
     Exon = Split_Upper(str(ParseData[0]))
@@ -105,8 +102,11 @@ def main():
     ExonResult.append({str(Exonkey[0]) : (exonLocation[0], exonLocation[1])})
     
     IntronResult = IntronResult[1 : -1]
+    
+    print(ExonResult)
     # intron的第一個是UTR5，最後一個是UTR3，我們不要。
 
+    
     Dataframe = pd.DataFrame(columns=['名稱', '起始位置', '結束位置', '長度'])
     Dataframe = Append_TO_Dataframe(Dataframe, UTR5_Result, 3)
     Dataframe = Append_TO_Dataframe(Dataframe, UTR3_Result, 4)
@@ -118,7 +118,9 @@ def main():
     # 根據"起始位置"欄位的值做排序。
     
     Dataframe.to_csv("hw2_result.csv", index=False)
+    
+    end = time.perf_counter()
+    print( end-start )
 
 if __name__ == "__main__":
     main()
-
