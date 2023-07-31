@@ -26,7 +26,7 @@ def sequenceDataParser(sequence: dict)-> dict:  # 解析爬回來的資料json�
     return transcriptData
 
 
-def wormbaseSequenceFileCrawler(transcripID: str)-> bool:
+def wormbaseSequenceFileCrawler(transcripID: str)-> bool:  # 爬蟲下載切割與未切割的序列檔案，回傳是否成功下載的布林值
     web_address  = "https://wormbase.org/species/c_elegans/transcript/" + transcripID
     browser = Web_Driver(chromedriver_path="/home/cosbi2/py_project/summer_training/chromedriver_linux64/chromedriver", web_address=web_address)
     try:    
@@ -39,11 +39,11 @@ def wormbaseSequenceFileCrawler(transcripID: str)-> bool:
         flag = False
     return flag
 
-def check_case(unsplicedData: list, splicedData: list) -> bool:
+def check_case(unsplicedData: list, splicedData: list) -> bool:  # 判斷兩序列的第一組小寫(5'UTR)以及最後一組小寫(3'UTR)是否相同
     return unsplicedData[0] == splicedData[0] and unsplicedData[-1] == splicedData[-1]
 
 
-def Split_dict_to_tuple(data: list[dict[str, tuple[int, int]]]):
+def Split_dict_to_tuple(data: list[dict[str, tuple[int, int]]]):  # 將舊的檔案格式更改為較為簡單的tuple形式
     result = []
     for _, data_dict in enumerate(sorted(data, key=lambda x: list(x.values())[0][0])):
         location = list(data_dict.values())
@@ -52,7 +52,7 @@ def Split_dict_to_tuple(data: list[dict[str, tuple[int, int]]]):
         result.append(tuple((startPoint, endPoint)))
     return result
 
-def Append_TO_Dataframe(dataframe: pd.DataFrame, data: list[tuple[int, int]], flag: int):
+def Append_TO_Dataframe(dataframe: pd.DataFrame, data: list[tuple[int, int]], flag: int):  # 將資料匯入DataFrame中儲存成欲輸出的格式
     for item in data:
         if flag >= 3:
             data_name = str(DataName(flag).name)
@@ -62,7 +62,7 @@ def Append_TO_Dataframe(dataframe: pd.DataFrame, data: list[tuple[int, int]], fl
         dataframe.loc[len(dataframe)] = {'名稱': data_name, '起始位置': item[0], '結束位置': item[1], '長度': length}
     return dataframe
 
-def sequenceData_to_tuple(sequenceData):
+def sequenceData_to_tuple(sequenceData):  # 將json檔中的資料轉換儲存成能用的tuple格式
     UTR5_Result = []
     UTR3_Result = []
     IntronResult = []
@@ -81,7 +81,7 @@ def sequenceData_to_tuple(sequenceData):
     return UTR5_Result, UTR3_Result, ExonResult, IntronResult
 
 
-def split_Data(ParseData):
+def split_Data(ParseData):  # 舊版的資料處裡時需要更改成正確的序列位置
     Exon = Split_Upper(str(ParseData))
     UTR_And_Intron = Split_Lower(str(ParseData))
     ExonResult = Find_Location(ParseData, Exon)
