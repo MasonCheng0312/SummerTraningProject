@@ -15,15 +15,20 @@ class Web_Driver():
         # 禁止使用gpu加速，提高爬蟲的穩定性
         self.chrome_options.add_argument("--detach=true")
         # 在程式結束後不關閉網頁
-        self.chrome_options.add_argument("--download.default_directory=/home/cosbi2/py_project/summer_training")
+        self.chrome_options.add_experimental_option("prefs", {"download.default_directory": "/home/cosbi2/py_project/summer_training"})
         # 改變預設下載路徑
         self.browser = webdriver.Chrome(options=self.chrome_options, executable_path=chromedriver_path)
         self.browser.get(web_address)
-        time.sleep(5)
+        time.sleep(4.5)
+        for _ in range(2):
+            self.browser.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+        time.sleep(1.5)
     
     def click(self, xpath):
-        elements = self.find_element(By.XPATH, xpath)
+        elements = self.browser.find_element(By.XPATH, xpath)
         elements.click()
+        time.sleep(0.5)
         
     def quit(self):
         self.browser.quit()
+        time.sleep(1)
