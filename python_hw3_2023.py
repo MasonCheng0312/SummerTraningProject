@@ -14,14 +14,14 @@ def wormbaseAnswerCrawler(transcripID: str)-> dict:  #直接爬網頁上整理�
 
 
 def sequenceDataParser(sequence: dict)-> dict:  # 解析爬回來的資料json檔
-    strand = sequence['unspliced_sequence_context_with_padding']['data']['strand']
-    # 判斷正負股
+    strand = sequence['fields']['unspliced_sequence_context_with_padding']['data']['strand']
+    # 判斷正負股Y40B10A.2a.1
 
     if strand == "+":
-        transcriptData = sequence['unspliced_sequence_context']['data']['positive_strand']['features']
+        transcriptData = sequence['fields']['unspliced_sequence_context']['data']['positive_strand']['features']
         # 將所有相關資料都儲存下來，包含位置以及序列等等
     else:
-        transcriptData = sequence['unspliced_sequence_context']['data']['nagative_strand']['features']
+        transcriptData = sequence['fields']['unspliced_sequence_context']['data']['nagative_strand']['features']
     return transcriptData
 
 
@@ -42,12 +42,11 @@ def check_case(unsplicedData: list, splicedData: list) -> bool:
     return unsplicedData[0] == splicedData[0] and unsplicedData[-1] == splicedData[-1]
 
 
-def splitData(ParseData):
-    Exon = Split_Upper(str(ParseData[0]))
-    UTR_And_Intron = Split_Lower(str(ParseData[0]))
-    ExonResult = Find_Location(ParseData[0], Exon)
-    IntronResult = Find_Location(str(ParseData[0]), UTR_And_Intron)
-
+def split_Data(ParseData):
+    Exon = Split_Upper(str(ParseData))
+    UTR_And_Intron = Split_Lower(str(ParseData))
+    ExonResult = Find_Location(ParseData, Exon)
+    IntronResult = Find_Location(str(ParseData), UTR_And_Intron)
     UTR5_Result = [IntronResult[0]]
     UTR3_Result = [IntronResult[-1]]
     # 此處將Intron資料中的UTR資料分別取出。
@@ -55,7 +54,6 @@ def splitData(ParseData):
     # 將Exon1的資料提出，並將Exon1的Key存到Exonkey中。
     exonLocation = list(ExonResult[0][Exonkey[0]])
     # 將上一行得到的Key丟到dict中得到value，即為存有位置資料的tuple，但因為tuple不能改，我們直接強制轉型別成list。
-
     UTR5key = list(UTR5_Result[0].keys())    
     # 對UTR5也同理。
     utr5Location = list(UTR5_Result[0][UTR5key[0]])
@@ -80,7 +78,7 @@ def splitData(ParseData):
 
 if __name__ == "__main__":
     search_target = input("please enter the target transcriptID you want to search\n")
-    if wormbaseSequenceFileCrawler(transcripID=search_target) :
+    if wormbaseSequenceFileCrawler(transcripID=search_target) : # 是否成功爬蟲(if yes)
         unsplicedSequence = Parse_File("unspliced+UTRTranscriptSequence_"+ search_target + ".fasta")
         splicedSequence = Parse_File("spliced+UTRTranscriptSequence_"+ search_target + ".fasta")
         unsplicedIntron = Split_Lower(unsplicedSequence[0])
@@ -88,14 +86,14 @@ if __name__ == "__main__":
         functionFlag = check_case(unsplicedIntron, splicedIntron)
     else:
         functionFlag = False
-
     if functionFlag:
-        ExonResult, IntronResult, UTR5_Result, UTR3_Result = splitData(unsplicedSequence[0])
+        ExonResult, IntronResult, UTR5_Result, UTR3_Result = split_Data(unsplicedSequence[0])
         Dataframe = pd.DataFrame(columns=['名稱', '起始位置', '結束位置', '長度'])
         Dataframe = Append_TO_Dataframe(Dataframe, UTR5_Result, 3)
         Dataframe = Append_TO_Dataframe(Dataframe, UTR3_Result, 4)
         Dataframe = Append_TO_Dataframe(Dataframe, IntronResult, 2)
         Dataframe = Append_TO_Dataframe(Dataframe, ExonResult, 1)
+        Dataframe = Dataframe.sort_values('起始位置')
         Dataframe.to_csv("hw5_result.csv", index=False)
     else:
         detail_data = wormbaseAnswerCrawler(search_target)
