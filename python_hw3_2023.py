@@ -1,8 +1,9 @@
 import json
+import os
 import pandas as pd
 import urllib.request
 from web_driver import Web_Driver
-from python_hw2_2022 import Parse_File, Split_Lower, Split_Upper, Append_TO_Dataframe, Find_Location,DataName
+from python_hw2_2022 import Parse_File, Split_Lower, Split_Upper, Find_Location, DataName
 
 def wormbaseAnswerCrawler(transcripID: str)-> dict:  #直接爬網頁上整理完成的資料(困難的case)
     url = "https://wormbase.org/rest/widget/transcript/" + transcripID + "/sequences"
@@ -15,7 +16,7 @@ def wormbaseAnswerCrawler(transcripID: str)-> dict:  #直接爬網頁上整理�
 
 def sequenceDataParser(sequence: dict)-> dict:  # 解析爬回來的資料json檔
     strand = sequence['fields']['unspliced_sequence_context_with_padding']['data']['strand']
-    # 判斷正負股Y40B10A.2a.1
+    # 判斷正負股
 
     if strand == "+":
         transcriptData = sequence['fields']['unspliced_sequence_context']['data']['positive_strand']['features']
@@ -40,6 +41,44 @@ def wormbaseSequenceFileCrawler(transcripID: str)-> bool:
 
 def check_case(unsplicedData: list, splicedData: list) -> bool:
     return unsplicedData[0] == splicedData[0] and unsplicedData[-1] == splicedData[-1]
+
+
+def Split_dict_to_tuple(data: list[dict[str, tuple[int, int]]]):
+    result = []
+    for _, data_dict in enumerate(sorted(data, key=lambda x: list(x.values())[0][0])):
+        location = list(data_dict.values())
+        startPoint = location[0][0]
+        endPoint = location[0][1]
+        result.append(tuple((startPoint, endPoint)))
+    return result
+
+def Append_TO_Dataframe(dataframe: pd.DataFrame, data: list[tuple[int, int]], flag: int):
+    for item in data:
+        if flag >= 3:
+            data_name = str(DataName(flag).name)
+        else:
+            data_name = str(DataName(flag).name) + f'{data.index(item)+ 1}'        
+        length = item[1] - item[0] + 1
+        dataframe.loc[len(dataframe)] = {'名稱': data_name, '起始位置': item[0], '結束位置': item[1], '長度': length}
+    return dataframe
+
+def sequenceData_to_tuple(sequenceData):
+    UTR5_Result = []
+    UTR3_Result = []
+    IntronResult = []
+    ExonResult = []
+    for item in sequenceData:
+        location = tuple((item["start"], item["stop"]))
+        print(location)
+        if item["type"] == "five_prime_UTR":
+            UTR5_Result.append(location)
+        elif item["type"] == 'exon':
+            ExonResult.append(location)
+        elif item["type"] == 'intron':
+            IntronResult.append(location)
+        elif item["type"] == 'three_prime_UTR':
+            UTR3_Result.append(location)
+    return UTR5_Result, UTR3_Result, ExonResult, IntronResult
 
 
 def split_Data(ParseData):
@@ -76,6 +115,7 @@ def split_Data(ParseData):
 
     return ExonResult, IntronResult, UTR5_Result, UTR3_Result
 
+
 if __name__ == "__main__":
     search_target = input("please enter the target transcriptID you want to search\n")
     if wormbaseSequenceFileCrawler(transcripID=search_target) : # 是否成功爬蟲(if yes)
@@ -89,13 +129,22 @@ if __name__ == "__main__":
     if functionFlag:
         ExonResult, IntronResult, UTR5_Result, UTR3_Result = split_Data(unsplicedSequence[0])
         Dataframe = pd.DataFrame(columns=['名稱', '起始位置', '結束位置', '長度'])
+        Dataframe = Append_TO_Dataframe(Dataframe, Split_dict_to_tuple(UTR5_Result), 3)
+        Dataframe = Append_TO_Dataframe(Dataframe, Split_dict_to_tuple(UTR3_Result), 4)
+        Dataframe = Append_TO_Dataframe(Dataframe, Split_dict_to_tuple(IntronResult), 2)
+        Dataframe = Append_TO_Dataframe(Dataframe, Split_dict_to_tuple(ExonResult), 1)
+        Dataframe = Dataframe.sort_values('起始位置')
+        Dataframe.to_csv(search_target + "_result.csv", index=False)
+    else:
+        detail_data = wormbaseAnswerCrawler(search_target)
+        result = sequenceDataParser(detail_data)
+        UTR5_Result, UTR3_Result, ExonResult, IntronResult = sequenceData_to_tuple(result)
+        Dataframe = pd.DataFrame(columns=['名稱', '起始位置', '結束位置', '長度'])
         Dataframe = Append_TO_Dataframe(Dataframe, UTR5_Result, 3)
         Dataframe = Append_TO_Dataframe(Dataframe, UTR3_Result, 4)
         Dataframe = Append_TO_Dataframe(Dataframe, IntronResult, 2)
         Dataframe = Append_TO_Dataframe(Dataframe, ExonResult, 1)
-        Dataframe = Dataframe.sort_values('起始位置')
-        Dataframe.to_csv("hw5_result.csv", index=False)
-    else:
-        detail_data = wormbaseAnswerCrawler(search_target)
-        result = sequenceDataParser(detail_data)
-        print(result)
+        Dataframe = Dataframe.sort_values('起始位置')        
+        Dataframe.to_csv(search_target + "_result.csv", index=False)
+    os.remove("unspliced+UTRTranscriptSequence_"+ search_target + ".fasta")
+    os.remove("spliced+UTRTranscriptSequence_"+ search_target + ".fasta")
