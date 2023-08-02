@@ -69,7 +69,6 @@ def sequenceData_to_tuple(sequenceData):  # 將json檔中的資料轉換儲存�
     ExonResult = []
     for item in sequenceData:
         location = tuple((item["start"], item["stop"]))
-        print(location)
         if item["type"] == "five_prime_UTR":
             UTR5_Result.append(location)
         elif item["type"] == 'exon':
@@ -119,8 +118,8 @@ def split_Data(ParseData):  # 舊版的資料處裡時需要更改成正確的�
 if __name__ == "__main__":
     search_target = input("please enter the target transcriptID you want to search\n")
     if wormbaseSequenceFileCrawler(transcripID=search_target) : # 是否成功爬蟲(if yes)
-        unsplicedSequence = Parse_File("unspliced+UTRTranscriptSequence_"+ search_target + ".fasta")
-        splicedSequence = Parse_File("spliced+UTRTranscriptSequence_"+ search_target + ".fasta")
+        unsplicedSequence = Parse_File("/home/cosbi2/py_project/summer_training/unspliced+UTRTranscriptSequence_"+ search_target + ".fasta")
+        splicedSequence = Parse_File("/home/cosbi2/py_project/summer_training/spliced+UTRTranscriptSequence_"+ search_target + ".fasta")
         unsplicedIntron = Split_Lower(unsplicedSequence[0])
         splicedIntron = Split_Lower(splicedSequence[0])
         functionFlag = check_case(unsplicedIntron, splicedIntron)
@@ -146,5 +145,5 @@ if __name__ == "__main__":
         Dataframe = Append_TO_Dataframe(Dataframe, ExonResult, 1)
         Dataframe = Dataframe.sort_values('起始位置')        
         Dataframe.to_csv(search_target + "_result.csv", index=False)
-    os.remove("unspliced+UTRTranscriptSequence_"+ search_target + ".fasta")
-    os.remove("spliced+UTRTranscriptSequence_"+ search_target + ".fasta")
+    os.remove("/home/cosbi2/py_project/summer_training/unspliced+UTRTranscriptSequence_"+ search_target + ".fasta")
+    os.remove("/home/cosbi2/py_project/summer_training/spliced+UTRTranscriptSequence_"+ search_target + ".fasta")
