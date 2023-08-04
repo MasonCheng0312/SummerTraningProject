@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from web_tool import views
 
 urlpatterns = [
@@ -25,5 +25,5 @@ urlpatterns = [
     path('hello/<str:username>',views.hello_world2),
     # 雖然都是hello/，但後面加上參數傳入的url似乎與前一個是不同的，網頁能夠清楚分辨兩者差異。
     # 記得在使用參數傳入時寫法，型態後面不可以+空格！！！會導致error
-
+    path('web_tool/', include("web_tool.urls")),
 ]
