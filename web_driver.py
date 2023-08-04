@@ -6,7 +6,7 @@ import time
 
 
 class Web_Driver():
-    def __init__(self, chromedriver_path:str, web_address: str):
+    def __init__(self, chromedriver_path: str, web_address: str):
         self.chrome_options = Options()
         self.chrome_options.add_argument("--mute-audio")
         # 將網頁靜音
@@ -33,4 +33,4 @@ class Web_Driver():
         
     def quit(self):
         self.browser.quit()
-        time.sleep(2.5)
+        time.sleep(1.5)
