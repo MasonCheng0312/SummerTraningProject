@@ -19,11 +19,13 @@ def sequenceDataParser(sequence: dict)-> dict:  # 解析爬回來的資料json�
     # 判斷正負股
 
     if strand == "+":
-        transcriptData = sequence['fields']['unspliced_sequence_context']['data']['positive_strand']['features']
+        unspliced_transcriptData = sequence['fields']['unspliced_sequence_context']['data']['positive_strand']['features']
+        spliced_transcriptData = sequence['fields']["spliced_sequence_context"]['data']['positive_strand']['features']
         # 將所有相關資料都儲存下來，包含位置以及序列等等
     else:
-        transcriptData = sequence['fields']['unspliced_sequence_context']['data']['nagative_strand']['features']
-    return transcriptData
+        unspliced_transcriptData = sequence['fields']['unspliced_sequence_context']['data']['nagative_strand']['features']
+        spliced_transcriptData = sequence['fields']["spliced_sequence_context"]['data']['nagative_strand']['features']
+    return unspliced_transcriptData, spliced_transcriptData
 
 
 def wormbaseSequenceFileCrawler(transcripID: str)-> bool:  # 爬蟲下載切割與未切割的序列檔案，回傳是否成功下載的布林值
@@ -115,6 +117,20 @@ def split_Data(ParseData):  # 舊版的資料處裡時需要更改成正確的�
     return ExonResult, IntronResult, UTR5_Result, UTR3_Result
 
 
+def cds_finder(UTR5, UTR3, Exon):  # 找到CDS的位置
+    cds = []
+    if len(UTR5) != 0:
+        start_pt = int(UTR5[-1][1]) + 1
+    else:
+        start_pt = 1
+    if len(UTR3) != 0:
+        end_pt = int(UTR3[0][0]) - 1
+    else:
+        end_pt = Exon[-1][1]
+    cds.append(tuple((start_pt, end_pt)))
+    return cds    
+
+
 if __name__ == "__main__":
     search_target = input("please enter the target transcriptID you want to search\n")
     if wormbaseSequenceFileCrawler(transcripID=search_target) : # 是否成功爬蟲(if yes)
@@ -136,14 +152,25 @@ if __name__ == "__main__":
         Dataframe.to_csv(search_target + "_result.csv", index=False)
     else:
         detail_data = wormbaseAnswerCrawler(search_target)
-        result = sequenceDataParser(detail_data)
-        UTR5_Result, UTR3_Result, ExonResult, IntronResult = sequenceData_to_tuple(result)
+        unspliced_result, spliced_result= sequenceDataParser(detail_data)
+        UTR5_Result, UTR3_Result, ExonResult, IntronResult = sequenceData_to_tuple(unspliced_result)
         Dataframe = pd.DataFrame(columns=['名稱', '起始位置', '結束位置', '長度'])
         Dataframe = Append_TO_Dataframe(Dataframe, UTR5_Result, 3)
         Dataframe = Append_TO_Dataframe(Dataframe, UTR3_Result, 4)
         Dataframe = Append_TO_Dataframe(Dataframe, IntronResult, 2)
         Dataframe = Append_TO_Dataframe(Dataframe, ExonResult, 1)
         Dataframe = Dataframe.sort_values('起始位置')        
-        Dataframe.to_csv(search_target + "_result.csv", index=False)
+        Dataframe.to_csv(search_target + "_unspliced_result.csv", index=False)
+
+        Dataframe.drop(Dataframe.index, inplace=True)
+        # 清空dataframe但保留標頭
+        UTR5_Result, UTR3_Result, ExonResult, _ = sequenceData_to_tuple(spliced_result)
+        CDS_Result = cds_finder(UTR5_Result, UTR3_Result, ExonResult)
+        Dataframe = Append_TO_Dataframe(Dataframe, UTR5_Result, 3)
+        Dataframe = Append_TO_Dataframe(Dataframe, CDS_Result, 5)
+        Dataframe = Append_TO_Dataframe(Dataframe, UTR3_Result, 4)
+        Dataframe = Append_TO_Dataframe(Dataframe, ExonResult, 1)   
+        Dataframe.to_csv(search_target + "_spliced_result.csv", index=False)
+
     os.remove("/home/cosbi2/py_project/summer_training/unspliced+UTRTranscriptSequence_"+ search_target + ".fasta")
     os.remove("/home/cosbi2/py_project/summer_training/spliced+UTRTranscriptSequence_"+ search_target + ".fasta")
