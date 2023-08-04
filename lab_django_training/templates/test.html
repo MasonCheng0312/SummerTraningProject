@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>test</title>
+    </head>
+    <body>
+        <h1 style="color:lightblue;">資料庫語法測試</h1>
+        {% for test_object in test_objects %}
+        <hr>
+        <h3>基因名稱：{{ test_object.gene_id }}</h3>
+        <hr>
+        <h3>轉譯基因名稱：{{ test_object.transcript_id }}</h3>
+        <hr>
+        <h3>基因數量：{{ test_object.field_oftranscripts }}</h3>
+        <hr>
+        {% endfor %}
+
+    </body>
+</html>
