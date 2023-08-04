@@ -1,4 +1,5 @@
 import pandas as pd
+import time
 
 
 def ParseGeneFile(file_path):
@@ -20,8 +21,8 @@ def Transform_To_Result_Format(Data):
             result_dict[value].append(key)
     return result_dict
 
-
-path = "c_elegans.PRJNA13758.WS289.mRNA_transcripts.fa"
+start = time.perf_counter()
+path = "/home/cosbi2/py_project/summer_training/c_elegans.PRJNA13758.WS289.mRNA_transcripts.fa"
 GeneData = ParseGeneFile(path)
 ResultData = Transform_To_Result_Format(GeneData)
 SortedData = dict(sorted(ResultData.items(), key=lambda item: len(item[1]), reverse=True))
@@ -32,3 +33,5 @@ for keys, values in SortedData.items():
     output_frame.loc[len(output_frame)] = {"Gene_ID" : keys, "transcript_ID" : values, "# of transcripts" : str(len(values))}
 
 output_frame.to_csv("hw1_output.csv", index= False)
+end = time.perf_counter()
+print( end-start )
