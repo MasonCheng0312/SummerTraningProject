@@ -1,0 +1,7 @@
+#table-container {
+    margin: 0 auto; /* 居中對齊 */
+    max-width: calc(100% - 40px)!important; /* 最大寬度，減去兩側各20px的間距 */
+    padding: 20px!important; /* 上下間距 */
+    box-sizing: border-box !important; /* 讓padding不會影響寬度計算 */
+    background-color: aqua !important;
+}
