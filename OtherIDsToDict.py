@@ -38,15 +38,15 @@ def get_OtherName(record: list[str]) -> str:
 
 PATH = "/home/cosbi2/py_project/summer_training/c_elegans.PRJNA13758.WS289.geneOtherIDs.txt"
 SEPARATOR = "\t"
-file = open(PATH)
-result = []
-for line in file:
-    data = line.rstrip("\n").split(SEPARATOR)
-    if is_live(data):
-        element: dict = {
-            "WBgene_name": get_WBname(data),
-            "transcriptID": get_transcriptID(data),
-            "GeneNames": get_GeneNames(data),
-            "OtherName": get_OtherName(data),
-        }
-    result.append(element)
+with open(PATH) as file:
+    result = []
+    for line in file:
+        data = line.rstrip("\n").split(SEPARATOR)
+        if is_live(data):
+            element: dict = {
+                "WBgene_name": get_WBname(data),
+                "transcriptID": get_transcriptID(data),
+                "GeneNames": get_GeneNames(data),
+                "OtherName": get_OtherName(data),
+            }
+        result.append(element)
