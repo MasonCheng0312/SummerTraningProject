@@ -4,22 +4,36 @@ from . import models
 
 def ajax_data(request):
     
-    gene_id = request.POST['gene_id']
+    search_target = request.POST['gene_id']
     
     try:
-        genes = models.GeneTable.objects.filter(gene_id__contains = gene_id)
+        genes = models.GeneTable.objects.filter(gene_id__contains = search_target)
         response = []
-        for gene in genes:
-            gene_id = gene.gene_id
-            transcript = gene.transcript_id
-            numbers = gene.field_oftranscripts
-            return_data = {
-                'gene_id': gene_id,
-                'transcript_id' : transcript,
-                'field_oftranscripts' : numbers
-            }
-            response.append(return_data)
-        
+        if genes:
+            for gene in genes:
+                gene_id = gene.gene_id
+                transcript = gene.transcript_id
+                numbers = gene.field_oftranscripts
+                return_data = {
+                    'gene_id': gene_id,
+                    'transcript_id' : transcript,
+                    'field_oftranscripts' : numbers
+                }
+                response.append(return_data)
+        else:
+            transcripts = models.GeneTable.objects.filter(transcript_id__contains = search_target)           
+        if transcripts:
+            for transcript in transcripts:
+                gene_id = transcript.gene_id
+                transcript_id = transcript.transcript_id
+                numbers = transcript.field_oftranscripts
+                return_data = {
+                    'gene_id': gene_id,
+                    'transcript_id' : transcript_id,
+                    'field_oftranscripts' : numbers
+                }
+                print(return_data)
+                response.append(return_data)
     except:
         message = 'Something wrong, please check again.'
     
