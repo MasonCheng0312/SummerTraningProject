@@ -19,8 +19,23 @@ class ErrorMessage(Enum):
 
 class record:
     def __init__(self, WBgene) -> None:
-        pass
-    pass
+        self._record_someName = models.DatasourceWithoutgenename.objects.get(
+            wbgene_name=WBgene
+        )
+        self._record_geneNameInfo = models.Genenametowbname.objects.get(
+            wbgene_name=WBgene
+        )
+        self._record_transInfo = models.GeneTable.objects.get(gene_id=WBgene)
+
+        self.WBgeneName = WBgene
+
+        self.geneName = self._record_geneNameInfo.genename
+
+        self.transcriptName = self._record_someName.transcriptid
+        self.otherName = self._record_someName.othername
+
+        self.length = self._record_transInfo.field_oftranscripts
+        self.transDetail = eval(self._record_transInfo.transcript_id)
 
 
 def assort_input(target: str) -> TargetType:
@@ -39,71 +54,53 @@ def assort_input(target: str) -> TargetType:
 
 
 def get_response(target: str, type: TargetType):
-    def get_geneName(WBgene):
-        record = models.Genenametowbname.objects.get(wbgene_name=WBgene)
-        return record.genename
-
     def get_WBgene_from_geneName(gene_name):
         record = models.Genenametowbname.objects.get(genename=gene_name)
         return record.wbgene_name
 
-    def get_transcriptName(WBgene):
-        record = models.DatasourceWithoutgenename.objects.get(wbgene_name=WBgene)
-        return record.transcriptid
-
-    def get_otherName(WBgene):
-        record = models.DatasourceWithoutgenename.objects.get(wbgene_name=WBgene)
-        return record.othername
-
-    def get_transcriptID_List(WBgene):
-        record = models.GeneTable.objects.get(gene_id=WBgene)
-        return record.transcript_id
-
     def search(WBgene):
-        record = models.GeneTable.objects.get(gene_id=WBgene)
+        Data = record(WBgene)
         return_data = {
-            "gene_id": WBgene,
-            "gene_name": get_geneName(WBgene),
-            "field_oftranscripts": record.field_oftranscripts,
-            "transcript_id": get_transcriptName(WBgene),
-            "other_name": get_otherName(WBgene),
+            "gene_id": Data.WBgeneName,
+            "gene_name": Data.geneName,
+            "field_oftranscripts": Data.length,
+            "transcript_id": Data.transcriptName,
+            "other_name": Data.otherName,
         }
-        return return_data
+        return return_data, Data.transDetail
 
-    def handle_DontKnow():
-        pass
-
-    if type is TargetType.WBgene:
-        response = search(target)
-        transID = get_transcriptID_List(target)
-        return response, transID
-    elif type is TargetType.GeneName:
-        WBgene = get_WBgene_from_geneName(target)
-        response = search(WBgene)
-        transID = get_transcriptID_List(WBgene)
-        return response, transID
-    elif type is TargetType.DontKnow:
-        try:        
-            if models.DatasourceWithoutgenename.objects.get(othername=target):
-                WBgene = models.DatasourceWithoutgenename.objects.get(
-                    othername=target
-                ).wbgene_name
-                response = search(WBgene)
-                transID = get_transcriptID_List(WBgene)
-                return response, transID
+    def handle_DontKnow(target):
+        try:
+            WBgene = models.DatasourceWithoutgenename.objects.get(
+                othername=target
+            ).wbgene_name
+            return WBgene
         except:
             pass
 
         try:
-            if models.DatasourceWithoutgenename.objects.get(transcriptid=target):
-                WBgene = models.DatasourceWithoutgenename.objects.get(
-                    transcriptid=target
-                ).wbgene_name
-                response = search(WBgene)
-                transID = get_transcriptID_List(WBgene)
-                return response, transID
-
+            WBgene = models.DatasourceWithoutgenename.objects.get(
+                transcriptid=target
+            ).wbgene_name
+            return WBgene
         except:
+            return ""
+
+    if type is TargetType.WBgene:
+        response , transID= search(target)
+        return response, transID
+    
+    elif type is TargetType.GeneName:
+        WBgene = get_WBgene_from_geneName(target)
+        response , transID = search(WBgene)
+        return response, transID
+
+    elif type is TargetType.DontKnow:
+        WBgene = handle_DontKnow(target)
+        if WBgene:
+            response , transID = search(WBgene)
+            return response, transID
+        else:
             return "", ""
 
         # try:
@@ -116,25 +113,25 @@ def get_response(target: str, type: TargetType):
         #         ).gene_id
 
         # except:
-        #     return "", ""        
-
-        
-        
-        
+        #     return "", ""
 
 
 def ajax_data(request):
-    target = request.POST["gene_id"]
+    target = request.POST["target"]
     errorCheck = ErrorMessage.Normal
     type = assort_input(target)
     response, transID = get_response(target, type)
+    transData = []
+    for item in transID:
+        dict = {"transcriptID":item}
+        transData.append(dict)
 
     if response == "":
         errorCheck = ErrorMessage.CantFindTarget
 
     return_result = {
         "response": response,
-        "transID": transID,
+        "transID": transData,
         "error": errorCheck.value,
     }
     return JsonResponse(return_result, safe=False)

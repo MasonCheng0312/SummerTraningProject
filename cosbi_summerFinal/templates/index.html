@@ -9,14 +9,15 @@
 <div class="card mt-3">
     <div class='card-body'>
         <form id="ajax_form">
-            <label for="gene_id" class="form-label">Gene ID:</label>
-            <input type="text" class="form-control" name="gene_id" placeholder="eg. WBGene00000010">
+            <label for="target" class="form-label">Search Target:</label>
+            <input type="text" class="form-control" name="target" placeholder="eg. WBGene00000010">
         </form>
         <hr>
-        <button class="btn btn-outline-primary" id="submit">送出</button>
+        <button class="btn btn-outline-primary" id="submit">Submit</button>
     </div>
     <div id="table-container">
         <table id="result_table" class="table_margin"></table>
+        <table id="link_table" class="table_margin"></table>
     </div>
 </div>
 {% endblock %}

@@ -24,6 +24,8 @@ $(document).ready(function(){
                     $("#result_table").DataTable({
                         "data": data,
                         "searching": false,
+                        "paging": false,
+                        "info": false,
                         "columns": [
                             {data: "gene_id", title: "WBgene Name"},
                             {data: "transcript_id", title: "Transcript ID"},
@@ -31,7 +33,25 @@ $(document).ready(function(){
                             {data: "other_name", title: "Other Name"},
                             {data: "field_oftranscripts", title: "Number of transcript"}
                         ]
-                    });}
+                    });
+
+                    if ($.fn.DataTable.isDataTable('#link_table')) {
+                        $('#link_table').DataTable().destroy();
+                        $('#link_table').empty();
+                    }
+
+                    var transList = response["transID"]
+
+                    $("#link_table").DataTable({
+                        "data": transList,
+                        "searching": false,
+                        "paging": false,
+                        "info": false,
+                        "columns": [
+                            {data: "transcriptID", title: "Transcript ID"},                        
+                        ]
+                    });
+                }
                     
             },
 
