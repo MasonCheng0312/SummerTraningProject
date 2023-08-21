@@ -9,9 +9,9 @@ from django.db import models
 
 
 class DatasourceWithoutgenename(models.Model):
-    wbgene_name = models.TextField(db_column='WBgene_name', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    transcriptid = models.TextField(db_column='transcriptID', blank=True, null=True)  # Field name made lowercase.
-    othername = models.TextField(db_column='OtherName', blank=True, null=True)  # Field name made lowercase.
+    wbgene_name = models.TextField(db_column='WBgene_name', primary_key=True, blank=True, null=False)  # Field name made lowercase.
+    transcriptid = models.TextField(db_column='transcriptID', blank=True, null=False)  # Field name made lowercase.
+    othername = models.TextField(db_column='OtherName', blank=True, null=False)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -19,7 +19,7 @@ class DatasourceWithoutgenename(models.Model):
 
 
 class Genenametowbname(models.Model):
-    genename = models.TextField(db_column='GeneName', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    genename = models.TextField(db_column='GeneName', primary_key=True, blank=True, null=False)  # Field name made lowercase.
     wbgene_name = models.TextField(db_column='WBgene_name', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
@@ -138,7 +138,7 @@ class DjangoSession(models.Model):
 
 
 class GeneTable(models.Model):
-    gene_id = models.TextField(db_column='Gene_ID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    gene_id = models.TextField(db_column='Gene_ID', primary_key=True, blank=True, null=False)  # Field name made lowercase.
     transcript_id = models.TextField(db_column='transcript_ID', blank=True, null=True)  # Field name made lowercase.
     field_oftranscripts = models.IntegerField(db_column='#oftranscripts', blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'.
 
