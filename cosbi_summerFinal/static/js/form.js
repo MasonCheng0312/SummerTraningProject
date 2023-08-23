@@ -1,15 +1,16 @@
-$(document).ready(function(){
-    $('#submit').click(function(){
+$(document).ready(function () {
+    $('#submit').click(function () {
         $.ajax({
             headers: { 'X-CSRFToken': csrf_token },
             type: 'POST',
-            url: '/web_tool/ajax_data/', 
+            url: '/web_tool/ajax_data/',
             data: $('#ajax_form').serialize(),
-            success: function(response){ 
-                if (response["error"] != "No Error"){
-                    alert(response["error"])}
-                    
-                else{
+            success: function (response) {
+                if (response["error"] != "No Error") {
+                    alert(response["error"])
+                }
+
+                else {
                     var data = [response["response"]];
                     // DataTable需要的資料格式是List(Dict)
                     // 媽的= =
@@ -27,11 +28,11 @@ $(document).ready(function(){
                         "paging": false,
                         "info": false,
                         "columns": [
-                            {data: "gene_id", title: "WBgene Name"},
-                            {data: "transcript_id", title: "Transcript ID"},
-                            {data: "gene_name", title: "Gene Name"},
-                            {data: "other_name", title: "Other Name"},
-                            {data: "field_oftranscripts", title: "Number of transcript"}
+                            { data: "gene_id", title: "WBgene Name" },
+                            { data: "transcript_id", title: "Transcript ID" },
+                            { data: "gene_name", title: "Gene Name" },
+                            { data: "other_name", title: "Other Name" },
+                            { data: "field_oftranscripts", title: "Number of transcript" }
                         ]
                     });
 
@@ -48,14 +49,21 @@ $(document).ready(function(){
                         "paging": false,
                         "info": false,
                         "columns": [
-                            {data: "transcriptID", title: "Transcript ID"},                        
+                            {
+                                data: "transcriptID",
+                                title: "Transcript ID",
+                                render: function (data, type, row) {
+                                    var url = "../detail_data/?name=" + encodeURIComponent(data);
+                                    return '<a href="' + url + '" target="_blank">' + data + '</a>';
+                                }
+                            },
                         ]
                     });
                 }
-                    
+
             },
 
-            error: function(){
+            error: function () {
                 alert('Something error');
             },
         });

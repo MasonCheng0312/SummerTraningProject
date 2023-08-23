@@ -69,12 +69,13 @@ def get_response(target: str, type: TargetType):
         }
         return return_data, Data.transDetail
 
-    def handle_DontKnow(target):
+    def handle_DontKnow(target, type):
         try:
             WBgene = models.DatasourceWithoutgenename.objects.get(
                 othername=target
             ).wbgene_name
-            return WBgene
+            type = TargetType.OtherName
+            return WBgene, type
         except:
             pass
 
@@ -82,26 +83,28 @@ def get_response(target: str, type: TargetType):
             WBgene = models.DatasourceWithoutgenename.objects.get(
                 transcriptid=target
             ).wbgene_name
-            return WBgene
+            type = TargetType.TranscriptID
+            return WBgene, type
         except:
             return ""
 
     if type is TargetType.WBgene:
         response , transID= search(target)
-        return response, transID
+        return response, transID, type
+
     
     elif type is TargetType.GeneName:
         WBgene = get_WBgene_from_geneName(target)
         response , transID = search(WBgene)
-        return response, transID
+        return response, transID, type
 
     elif type is TargetType.DontKnow:
-        WBgene = handle_DontKnow(target)
+        WBgene, type = handle_DontKnow(target, type)
         if WBgene:
-            response , transID = search(WBgene)
-            return response, transID
+            response , transID= search(WBgene)
+            return response, transID, type
         else:
-            return "", ""
+            return "", "", type
 
         # try:
         #     if (
@@ -120,7 +123,7 @@ def ajax_data(request):
     target = request.POST["target"]
     errorCheck = ErrorMessage.Normal
     type = assort_input(target)
-    response, transID = get_response(target, type)
+    response, transID, type = get_response(target, type)
     transData = []
     for item in transID:
         dict = {"transcriptID":item}
@@ -133,6 +136,7 @@ def ajax_data(request):
         "response": response,
         "transID": transData,
         "error": errorCheck.value,
+        "type": type.name
     }
     return JsonResponse(return_result, safe=False)
     # safe設置為false是因為jsonResponse預設只能傳入dict
@@ -140,3 +144,6 @@ def ajax_data(request):
 
 def form(request):
     return render(request, "index.html", locals())
+
+def result(request):
+    return render(request, "result.html", locals())
