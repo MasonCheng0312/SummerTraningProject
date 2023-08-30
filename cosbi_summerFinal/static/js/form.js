@@ -11,8 +11,9 @@ $(document).ready(function () {
                 }
 
                 else {
+                    var target = $(input_data).val();                     
                     var data = [response["response"]];
-                    // DataTable需要的資料格式是List(Dict)
+                    // DataTable需要的資料格式是List[Dict]
                     // 媽的= =
 
                     // 移除先前的資料表，以避免重複初始化
@@ -33,7 +34,21 @@ $(document).ready(function () {
                             { data: "gene_name", title: "Gene Name" },
                             { data: "other_name", title: "Other Name" },
                             { data: "field_oftranscripts", title: "Number of transcript" }
-                        ]
+                        ],
+                        "createdRow": function(row, data, dataIndex){
+                            if (data.gene_id === target){
+                                $(row).attr("style", "background-color:lightblue")
+                            }
+                            if (data.transcript_id === target){
+                                $(row).attr("style", "background-color:lightblue")
+                            }
+                            if (data.gene_name === target) {
+                                $(row).attr("style", "background-color:lightblue")
+                            }
+                            if (data.other_name === target){
+                                $(row).attr("style", "background-color:lightblue")
+                            }
+                        },                        
                     });
 
                     if ($.fn.DataTable.isDataTable('#link_table')) {
@@ -41,8 +56,7 @@ $(document).ready(function () {
                         $('#link_table').empty();
                     }
 
-                    var transList = response["transID"]
-
+                    var transList = response["transID"];
                     $("#link_table").DataTable({
                         "data": transList,
                         "searching": false,
@@ -57,7 +71,12 @@ $(document).ready(function () {
                                     return '<a href="' + url + '" target="_blank">' + data + '</a>';
                                 }
                             },
-                        ]
+                        ],
+                        "createdRow": function(row, data, dataIndex){
+                            if (data.transcriptID === target){
+                                $(row).find("td").attr("style", "background-color:lightblue")
+                            }
+                        }
                     });
                 }
 

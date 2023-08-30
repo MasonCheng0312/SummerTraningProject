@@ -7,9 +7,10 @@ from enum import IntEnum, Enum
 class TargetType(IntEnum):
     WBgene = 1
     TranscriptID = 2
-    GeneName = 3
-    OtherName = 4
-    DontKnow = 5
+    TranscriptName = 3
+    GeneName = 4
+    OtherName = 5
+    DontKnow = 6
 
 
 class ErrorMessage(Enum):
@@ -83,10 +84,20 @@ def get_response(target: str, type: TargetType):
             WBgene = models.DatasourceWithoutgenename.objects.get(
                 transcriptid=target
             ).wbgene_name
-            type = TargetType.TranscriptID
+            type = TargetType.TranscriptName
             return WBgene, type
         except:
-            return ""
+            pass
+
+        try:
+            WBgene = models.TransidToWbgene.objects.get(
+                transcriptid = target
+            ).wbgene_name
+            type = TargetType.TranscriptID
+            return WBgene, type
+
+        except:
+            return "", type
 
     if type is TargetType.WBgene:
         response , transID= search(target)
@@ -105,18 +116,6 @@ def get_response(target: str, type: TargetType):
             return response, transID, type
         else:
             return "", "", type
-
-        # try:
-        #     if (
-        #         len(models.GeneTable.objects.filter(transcript_id__contains=target))
-        #         == 1
-        #     ):
-        #         WBgene = models.GeneTable.objects.filter(
-        #             transcript_id__contains=target
-        #         ).gene_id
-
-        # except:
-        #     return "", ""
 
 
 def ajax_data(request):

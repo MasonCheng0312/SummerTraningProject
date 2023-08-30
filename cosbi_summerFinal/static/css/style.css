@@ -1,4 +1,11 @@
-.table_margin {
-    margin-left: 100px; /* 居中對齊 */
-    margin-right: 100px;
+.mark {
+    background-color: lightpink !important;
+    color: red !important;
+}
+
+.selfbtn {
+    background-color: aquamarine;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }

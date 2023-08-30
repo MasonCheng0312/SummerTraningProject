@@ -10,8 +10,8 @@ from django.db import models
 
 class DatasourceWithoutgenename(models.Model):
     wbgene_name = models.TextField(db_column='WBgene_name', primary_key=True, blank=True, null=False)  # Field name made lowercase.
-    transcriptid = models.TextField(db_column='transcriptID', blank=True, null=False)  # Field name made lowercase.
-    othername = models.TextField(db_column='OtherName', blank=True, null=False)  # Field name made lowercase.
+    transcriptid = models.TextField(db_column='transcriptID', blank=True, null=True)  # Field name made lowercase.
+    othername = models.TextField(db_column='OtherName', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -145,3 +145,12 @@ class GeneTable(models.Model):
     class Meta:
         managed = False
         db_table = 'gene_table'
+
+
+class TransidToWbgene(models.Model):
+    transcriptid = models.TextField(primary_key=True, blank=True, null=False)
+    wbgene_name = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'transID_to_WBgene'
