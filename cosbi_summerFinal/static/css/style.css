@@ -4,8 +4,8 @@
 }
 
 .selfbtn {
-    background-color: aquamarine;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    margin-left: 45%;
 }
