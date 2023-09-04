@@ -21,7 +21,7 @@ window.onload = function() {
             return Response.json();
         })
         .then(Data =>{
-
+            console.log(Data)
         })
         .catch(error => {
             console.error("There was some error in fetch operation :", error);
