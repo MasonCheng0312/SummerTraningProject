@@ -9,3 +9,17 @@
     justify-content: center;
     margin-left: 45%;
 }
+
+.table-container{
+    margin: 50px;
+}
+
+.text-same-case {
+    font-family: monospace;
+}
+
+.line-number {
+    display: inline-block; /* 将文本变为块级元素以设置宽度 */
+    width: 5em; /* 设置文本宽度为五个字符的宽度 */
+    text-align: right; 
+}

@@ -178,8 +178,7 @@ def responseOperater(AssortedData:list[list[tuple[int, int], DataType]]):
                     "end_point":location[1],
                     "name":item[1].value,
                           }
-                response.append(result)
-    print(response)            
+                response.append(result)     
     return response
 
 def getTransData(request):

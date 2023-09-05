@@ -3,20 +3,20 @@
 {% load static %}
 {% block title %} result {% endblock %}
 {% block content %}
-<div class="display: flex; justify-content: center;">
+<div>
     <button id="unspliced_button" class="btn btn-outline-primary selfbtn">UnSpliced Sequences</button>
     <div id="unspliced_content" style="display: none;">
-        <div id="unsplice_sequence_container" class="sequence_container"></div>
+        <div id="unsplice_sequence_container" class="sequence_container" style="margin-left: 33% ;"></div>
         <div class="table-container">
-            <table id="unsplice_data"></table>
+            <table id="unsplice_data_table" class="hover display"></table>
         </div>
     </div>
 
     <button id="spliced_button" class="btn btn-outline-primary selfbtn" >Spliced Sequences</button>
     <div id="spliced_content" style="display: none;">
-        <div id="splice_sequence_container" class="sequence_container"></div>
+        <div id="splice_sequence_container" class="sequence_container" style="margin-left: 33%"></div>
         <div class="table-container">
-            <table id="splice_data"></table>
+            <table id="splice_data_table" class="hover display"></table>
         </div>
     </div>
 
