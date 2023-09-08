@@ -66,8 +66,12 @@ def sequenceJsonDataParser(WBdata: dict) -> tuple[dict, dict]:  # 解析爬回�
 def is_easyCase(
     unsplicedData: list, splicedData: list
 ) -> bool:  # 判斷兩序列的第一組小寫(5'UTR)以及最後一組小寫(3'UTR)是否相同
-    return unsplicedData[0] == splicedData[0] and unsplicedData[-1] == splicedData[-1]
-
+    if len(splicedData) == 0:
+        return True
+    else:
+        return unsplicedData[0] == splicedData[0] and unsplicedData[-1] == splicedData[-1]
+    
+    
 
 def difficultCaseAnswer(
     sequenceData: dict,
@@ -98,8 +102,11 @@ def difficultCaseAnswer(
 def easyCaseAnswer(unsplicedSeq, splicedSeq) -> list[list[tuple[int, int], DataType]]:
     def ExonRefactoring(Exon:list[str],  Utr_Intron:list[str]) -> list[str]:
         # in easy case, Exon1 contain 5'UTR, and last Exon contain 3'UTR.
-        Exon[0] = Utr_Intron[0] + Exon[0]
-        Exon[-1] = Exon[-1] + Utr_Intron[-1]
+        try:
+            Exon[0] = Utr_Intron[0] + Exon[0]
+            Exon[-1] = Exon[-1] + Utr_Intron[-1]
+        except:
+            pass
         return Exon
     
 
@@ -116,8 +123,11 @@ def easyCaseAnswer(unsplicedSeq, splicedSeq) -> list[list[tuple[int, int], DataT
     def getResult(resultList:list, ExonLoc:list[tuple[(int, int)]], IntronAndUtrLoc:list[tuple[int, int]]):
         resultList.append([ExonLoc, DataType.Exon])       
         resultList.append([IntronAndUtrLoc[1:-1], DataType.Intron])
-        resultList.append([[IntronAndUtrLoc[0]], DataType.Utr5])
-        resultList.append([[IntronAndUtrLoc[-1]], DataType.Utr3])
+        try:
+            resultList.append([[IntronAndUtrLoc[0]], DataType.Utr5])
+            resultList.append([[IntronAndUtrLoc[-1]], DataType.Utr3])
+        except:
+            pass
         return resultList
     
     unsplicedResult = []
@@ -160,6 +170,26 @@ def getCDSInfo(AssortedData):
     return [[tuple((start_pt, end_pt))], DataType.CDS]
 
 
+def getProteinInfo(CDS):
+    def load_codon_table():
+        with open('data/codon_table.json', 'r') as file:
+            codon_table_data = json.load(file)
+        return codon_table_data
+    
+    codon_table = load_codon_table()
+    cds_sequence = CDS.replace("T", "U")
+    # 從檔案中得到的資料是DNA的ATCG含氮鹼基，須將T轉換成U才是能夠轉譯的RNA序列。
+    unit_set: list = [cds_sequence[i : i+3] for i in range(0, len(cds_sequence), 3)]
+    # 將cds的序列每三個鹼基做切割並存入list中。
+    unitProtein: list = [codon_table[unit] for unit in unit_set]
+    # 將切割完成的單元作為輸入找到在codon_table中的對應的胺基酸。
+    unitProtein.pop(unitProtein.index("STOP"))
+    # 將結果中代表中止的STOP訊號從胺基酸序列中刪除。
+    proteinSeq = "".join(unitProtein)
+
+    return proteinSeq
+
+
 def responseOperater(AssortedData:list[list[tuple[int, int], DataType]]):
     response = []
     for item in AssortedData:
@@ -198,10 +228,15 @@ def getTransData(request):
             unsplicedAssortedData = difficultCaseAnswer(unsplicedData)
             splicedAssortedData = difficultCaseAnswer(splicedData)
             splicedAssortedData.append(getCDSInfo(splicedAssortedData))
+        CDS_Seq_Location = splicedAssortedData[-1][0][0]
+        CDS_Seq = splicedSequence[CDS_Seq_Location[0]-1:CDS_Seq_Location[1]]
+        proteinSeq = getProteinInfo(CDS_Seq)
         response = {"unsplicedData":responseOperater(unsplicedAssortedData),
                     "unsplicedSeq":unsplicedSequence,
                     "splicedData":responseOperater(splicedAssortedData),
-                    "splicedSeq":splicedSequence,}
+                    "splicedSeq":splicedSequence,
+                    "proteinSeq":proteinSeq,
+                    }
     return JsonResponse(response, safe=False)
 
 

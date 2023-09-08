@@ -7,6 +7,7 @@
     <button id="unspliced_button" class="btn btn-outline-primary selfbtn">UnSpliced Sequences</button>
     <div id="unspliced_content" style="display: none;">
         <div id="unsplice_sequence_container" class="sequence_container" style="margin-left: 33% ;"></div>
+        <center><div id="unspliced_scaleLinear_container" ></div></center>
         <div class="table-container">
             <table id="unsplice_data_table" class="hover display"></table>
         </div>
@@ -14,7 +15,8 @@
 
     <button id="spliced_button" class="btn btn-outline-primary selfbtn" >Spliced Sequences</button>
     <div id="spliced_content" style="display: none;">
-        <div id="splice_sequence_container" class="sequence_container" style="margin-left: 33%"></div>
+        <div id="splice_sequence_container" class="sequence_container" style="margin-left: 34%"></div>
+        <center><div id="spliced_scaleLinear_container"></div></center>
         <div class="table-container">
             <table id="splice_data_table" class="hover display"></table>
         </div>
@@ -22,8 +24,10 @@
 
     <button id="protein_button" class="btn btn-outline-primary selfbtn" >Protein Sequences</button>
     <div id="protein_content" style="display: none;">
-        <div id="protein_sequence"></div>
+        <div id="protein_sequence_container" class="sequence_container" style="margin-left: 33%"></div>
     </div>
 </div>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="../../static/js/result.js"></script>
+
 {% endblock %}

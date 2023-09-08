@@ -10,7 +10,7 @@
     margin-left: 45%;
 }
 
-.table-container{
+.table-container {
     margin: 50px;
 }
 
@@ -19,7 +19,26 @@
 }
 
 .line-number {
-    display: inline-block; /* 将文本变为块级元素以设置宽度 */
-    width: 5em; /* 设置文本宽度为五个字符的宽度 */
-    text-align: right; 
+    display: inline-block;
+    /* 将文本变为块级元素以设置宽度 */
+    width: 5em;
+    /* 设置文本宽度为五个字符的宽度 */
+    text-align: right;
 }
+
+.sequence_container {
+    margin-top: 30px;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.orange {
+    background-color: orange;
+}
+
+.UTR {
+    background-color: lightgray !important;
+}
+
