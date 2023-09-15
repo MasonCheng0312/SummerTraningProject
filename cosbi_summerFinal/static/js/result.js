@@ -139,7 +139,7 @@ function insertSequence(sequence, containerID){
 function drawScaleLinear(containerID, seqLength){
     var parentDiv = d3.select("#"+containerID); 
     var width = 1600;
-    var height = 400;
+    var height = 200;
     var svg = d3.select("#"+containerID)
         .append("svg")
         .attr("width", width)
@@ -153,8 +153,13 @@ function drawScaleLinear(containerID, seqLength){
         .domain([0, seqLength])
         .range([30, width - 30]);
 
+    var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
     svg.append("g")
-        .attr("transform", "translate(0," + height / 2 + ")")
+        .attr("transform", "translate(0, 110)")
         .call(d3.axisBottom(xScale));
 
     svg.selectAll("rect")
@@ -162,15 +167,41 @@ function drawScaleLinear(containerID, seqLength){
         .enter()
         .append("rect")
         .attr("x", function (d) { return xScale(d.start); })
-        .attr("y", (height / 2 - 20))
-        .style("fill-opacity", 0.6)
+        .attr("y", function(d){
+            if (d.class ==="UTR"){return (height / 2 - 30);}
+            else{return (height / 2 - 20);}} )
+        
         .attr("width", function (d) { 
             return xScale(d.end) - xScale(d.start); })
-        .attr("height", 30)
+        .attr("height", function(d){
+                        if (d.class ==="UTR"){return 20;}
+                        else{return 30;}
+        })
         .style("fill", function (d) { 
-                if (d.class ==="UTR"){return "lightgray";}
+                if (d.class ==="UTR"){return "grey";}
                 else{return d.class;}
-             });
+             })
+             .on("mouseover", function (d) {
+                var intervalData = d3.select(this).data()[0]; // 获取绑定到当前元素上的数据
+                var rect = this.getBoundingClientRect(); // 获取元素相对于视口的位置信息
+                var pageX = rect.left + window.scrollX; // 计算鼠标相对于文档的X坐标
+                var pageY = rect.top + window.scrollY; // 计算鼠标相对于文档的Y坐标
+            
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 0.9);
+                tooltip.html("Start: " + (parseInt(intervalData.start, 10)+1) + "<br/>End: " + intervalData.end)
+                    .style("left", (pageX) + "px")
+                    .style("top", (pageY - 28) + "px");
+            })
+            .on("mouseout", function (d) {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+            
+    
+        
     d3.selectAll("text").style("font-size", "16px");
 
 }
@@ -200,12 +231,22 @@ window.onload = function () {
             unsplicedSeq = Data["unsplicedSeq"];
             splicedSeq = Data["splicedSeq"];
             proteinSeq = Data["proteinSeq"];
+            if(proteinSeq === ""){
+                var container = document.getElementById("protein_button");
+                container.style.display = "none";
+            }
+            else{
+                var container = document.getElementById("protein_button");
+                container.style.display = "block";
+            }   
             unsplicedIntervalTable = getInterval_FromDataTable(Data["unsplicedData"])
             splicedIntervalTable = getInterval_FromDataTable(Data["splicedData"])
-
+            
             insertSequence(unsplicedSeq, "unsplice_sequence_container");
             insertSequence(splicedSeq, "splice_sequence_container");
+            
             insertSequence(proteinSeq, "protein_sequence_container");
+            console.log(unsplicedIntervalTable);
 
             drawScaleLinear("unspliced_scaleLinear_container",unsplicedSeq.length);
             drawScaleLinear("spliced_scaleLinear_container",splicedSeq.length);

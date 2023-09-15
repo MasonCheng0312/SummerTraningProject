@@ -37,16 +37,19 @@ $(document).ready(function () {
                         ],
                         "createdRow": function(row, data, dataIndex){
                             if (data.gene_id === target){
-                                $(row).attr("style", "background-color:lightblue")
+                                $(row).attr("style", "background-color:lightblue");
                             }
                             if (data.transcript_id === target){
-                                $(row).attr("style", "background-color:lightblue")
+                                $(row).attr("style", "background-color:lightblue");
                             }
-                            if (data.gene_name === target) {
-                                $(row).attr("style", "background-color:lightblue")
+                            for (const item of data.gene_name){
+                                if (item === target) {
+                                    $(row).attr("style", "background-color:lightblue");
+                                }
                             }
+                            
                             if (data.other_name === target){
-                                $(row).attr("style", "background-color:lightblue")
+                                $(row).attr("style", "background-color:lightblue");
                             }
                         },                        
                     });
@@ -56,7 +59,7 @@ $(document).ready(function () {
                         $('#link_table').empty();
                     }
 
-                    var transList = response["transID"];
+                    var transList = response["transData"];
                     $("#link_table").DataTable({
                         "data": transList,
                         "searching": false,
@@ -67,10 +70,11 @@ $(document).ready(function () {
                                 data: "transcriptID",
                                 title: "Transcript ID",
                                 render: function (data, type, row) {
-                                    var url = "../detail_data/?name=" + encodeURIComponent(data);
+                                    var url = "../detail_data/?name=" + encodeURIComponent(data) + "&type=" + encodeURIComponent(row.type);
                                     return '<a href="' + url + '" target="_blank">' + data + '</a>';
                                 }
                             },
+                            {data:"type", title:"Type"},
                         ],
                         "createdRow": function(row, data, dataIndex){
                             if (data.transcriptID === target){
