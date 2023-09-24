@@ -75,6 +75,10 @@ $(document).ready(function () {
                                 }
                             },
                             {data:"type", title:"Type"},
+                            {data: null, title:"Site", render: function(data, type, row){
+                                var url = "../piRNA_taget_predict/?name=" + encodeURIComponent(row.transcriptID);
+                                return '<a href="' + url + '" target="_blank"><button class= "button_site">Site</button></a>';
+                            }}
                         ],
                         "createdRow": function(row, data, dataIndex){
                             if (data.transcriptID === target){

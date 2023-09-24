@@ -148,3 +148,6 @@ def form(request):
 
 def result(request):
     return render(request, "result.html", locals())
+
+def site(request):
+    return render(request, "site.html", locals())

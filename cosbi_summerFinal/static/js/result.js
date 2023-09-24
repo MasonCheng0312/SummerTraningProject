@@ -82,6 +82,17 @@ function getInterval_FromDataTable(Data){
             }
             else{colorType = "orange";}
         }
+
+        if(name.includes("CDS")){
+            var unit_interval = {
+                "start":start_point-1,
+                "end":end_point,
+                "class":"green",
+            };
+
+            intervalResult.push(unit_interval);
+        }
+
     }
     return intervalResult;
     }
@@ -135,9 +146,7 @@ function insertSequence(sequence, containerID){
     sequenceContainer.innerHTML = '<p class="text-same-case">'+formatSequence(sequence)+'<p/>'
 }
 
-
 function drawScaleLinear(containerID, seqLength){
-    var parentDiv = d3.select("#"+containerID); 
     var width = 1600;
     var height = 200;
     var svg = d3.select("#"+containerID)
@@ -168,20 +177,20 @@ function drawScaleLinear(containerID, seqLength){
         .append("rect")
         .attr("x", function (d) { return xScale(d.start); })
         .attr("y", function(d){
-            if (d.class ==="UTR"){return (height / 2 - 30);}
+            if (d.class ==="UTR"||d.class === "green"){return (height / 2 - 30);}
             else{return (height / 2 - 20);}} )
         
         .attr("width", function (d) { 
             return xScale(d.end) - xScale(d.start); })
         .attr("height", function(d){
-                        if (d.class ==="UTR"){return 20;}
+                        if (d.class ==="UTR"||d.class === "green"){return 10;}
                         else{return 30;}
         })
         .style("fill", function (d) { 
                 if (d.class ==="UTR"){return "grey";}
                 else{return d.class;}
              })
-             .on("mouseover", function (d) {
+        .on("mouseover", function (d) {
                 var intervalData = d3.select(this).data()[0]; // 获取绑定到当前元素上的数据
                 var rect = this.getBoundingClientRect(); // 获取元素相对于视口的位置信息
                 var pageX = rect.left + window.scrollX; // 计算鼠标相对于文档的X坐标
@@ -194,7 +203,7 @@ function drawScaleLinear(containerID, seqLength){
                     .style("left", (pageX) + "px")
                     .style("top", (pageY - 28) + "px");
             })
-            .on("mouseout", function (d) {
+        .on("mouseout", function (d) {
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
@@ -246,7 +255,6 @@ window.onload = function () {
             insertSequence(splicedSeq, "splice_sequence_container");
             
             insertSequence(proteinSeq, "protein_sequence_container");
-            console.log(unsplicedIntervalTable);
 
             drawScaleLinear("unspliced_scaleLinear_container",unsplicedSeq.length);
             drawScaleLinear("spliced_scaleLinear_container",splicedSeq.length);

@@ -1,0 +1,119 @@
+{
+    "gene": "AUAUACAUACAUAACGAUCUUCUCACUGACCAAAAGACCGACGAAAGAAAAAAUGGCUGCCGCUCAAAGACAAAGCCCAAUUGACAUCGUCCCACAACACGUGUGCUGUGACACAGACGUUUGCAAGGCUGAUGCCUUGAACAUUGACUACAAAUCAGGUGACUGUUGCGAUGUCCUUGUCUCCGAAGGAGGUUUCCUUGUGAAUGUCAAGAGAAAUUGUGGCACAUUCCUUACCGCCAACCAUUUACCAUCAUCAAAAUUCGCGUUGGCUCAGUUCCAUGCUCAUUGGGGAAGCAACUCGAAAGAAGGAUCCGAGCACUUUUUGGACGGAAAACAACUUAGCGGAGAGGUUCACUUUGUAUUCUGGAACACCAGCUAUGAGUCGUUUAAUGUGGCACUCAGCAAGCCCGAUGGAUUGGCGGUUGUUGGAGUCUUCUUGAAGGAAGGAAAAUACAAUGACAAUUACCAUGGCCUGAUCGACACAGUGCGCAAAGCCACCGGAAAUGCCACACCAAUUGCCAUGCCAAAAGACUUCCACAUUGAGCAUCUUCUCCCAUCCCCGGACAAGAGAGAAUUCGUUACAUACCUCGGAUCCCUUACCACCCCACCAUACAACGAGUGUGUUAUCUGGACCUUGUUCACAGAGCCUGUGGAGGUCUCCUUCGGACAGCUCAACGUGCUCCGUAAUAUCAUCCCCGCCAAUCAUCGCGCCUGCCAAGACAGAUGCGACCGUGAAAUCCGAUCUUCCUUCAACUUUUAAAUUUCUUAUUUUUUUCCCUUCUCAAUGGUUUUUUCUAUUUAGUUUUUCUGUACGAGAACAACUCACAAUCAUCAUGUAAAAAACAAGUUCACACCCCCGUGCCGAUGUAAGUAUGAAACGUCUCUUUCCCCUCAGAACAUACAUGUACGAAGAAGAGCUUAACACUCUUUUCUGCUUUCUCAUUAUAAAUAAUUUAGUAUUCAACUGGAAUAAAAAGUUUUUCGCUU",
+    "name": "R01E6.3b.1_spliced+UTR",
+    "newout": [
+        [
+            "21ur-14301",
+            "798-818",
+            6,
+            "<mark id='b'>5</mark>,<mark>11</mark>,<mark id='b'>12</mark>,<mark id='b'>15</mark>,<mark>16</mark>,<mark id='b'>17</mark>",
+            "11,16",
+            0,
+            1,
+            2,
+            3,
+            "<span style=\"white-space:nowrap\">5' UUUAGUUUUUCUGU<span id='L'>|</span>ACGAGA<span id='L'>|</span>A 3'",
+            "3' AAAU<mark id='b'>U</mark><mark>U</mark><mark id='b'>G</mark>AA<mark id='b'>G</mark><mark>U</mark>ACA<span id='L'>|</span>UG<mark id='b'>U</mark>UCU<span id='L'>|</span>U 5'</span>",
+            [
+                "0.539480825",
+                "12.16179163",
+                "20.3890047",
+                "7.305842446",
+                "0"
+            ],
+            "AAAUUUGAAGUACAUGUUCUU",
+            "00798",
+            0.0
+        ],
+        [
+            "21ur-6833",
+            "790-810",
+            6,
+            "<mark id='g'>1</mark>,<mark id='b'>4</mark>,<mark id='b'>5</mark>,<mark id='b'>9</mark>,<mark>14</mark>,<mark>16</mark>",
+            "14,16",
+            0,
+            2,
+            2,
+            1,
+            "<span style=\"white-space:nowrap\">5' UUUUUCUAUUUAGU<span id='L'>|</span>UUUUCU<span id='L'>|</span>G 3'",
+            "3' AAAAA<mark>A</mark>A<mark>C</mark>AAAU<mark id='b'>U</mark>A<span id='L'>|</span>AA<mark id='b'>G</mark><mark id='b'>G</mark>GA<span id='L'>|</span><mark id='g'>U</mark> 5'</span>",
+            [
+                "1.618442476",
+                "42.38200114",
+                "31.89690919",
+                "0.958143272",
+                "0"
+            ],
+            "AAAAAAACAAAUUAAAGGGAU",
+            "00790",
+            1.5
+        ],
+        [
+            "21ur-13811",
+            "423-443",
+            7,
+            "<mark id='g'>1</mark>,<mark id='b'>2</mark>,<mark id='b'>5</mark>,<mark>8</mark>,<mark id='b'>15</mark>,<mark>17</mark>,<mark id='b'>18</mark>",
+            "8,17",
+            0,
+            2,
+            2,
+            2,
+            "<span style=\"white-space:nowrap\">5' UUGUUGGAGUCUUC<span id='L'>|</span>UUGAAG<span id='L'>|</span>G 3'",
+            "3' AAC<mark id='b'>G</mark><mark>C</mark>C<mark id='b'>U</mark>UCAGAA<mark>A</mark><span id='L'>|</span>AA<mark id='b'>U</mark>UU<mark id='b'>U</mark><span id='L'>|</span><mark id='g'>U</mark> 5'</span>",
+            [
+                "0",
+                "0",
+                "0.125085918",
+                "0",
+                "0"
+            ],
+            "AACGCCUUCAGAAAAAUUUUU",
+            "00423",
+            0.0
+        ],
+        [
+            "21ur-10564",
+            "442-462",
+            6,
+            "<mark id='b'>5</mark>,<mark id='b'>11</mark>,<mark>14</mark>,<mark id='b'>16</mark>,<mark id='b'>17</mark>,<mark>18</mark>",
+            "14,18",
+            0,
+            1,
+            2,
+            3,
+            "<span style=\"white-space:nowrap\">5' GGAAGGAAAAUACA<span id='L'>|</span>AUGACA<span id='L'>|</span>A 3'",
+            "3' CCU<mark>A</mark><mark id='b'>U</mark><mark id='b'>U</mark>U<mark>C</mark>UU<mark id='b'>G</mark>UGU<span id='L'>|</span>UA<mark id='b'>U</mark>UGU<span id='L'>|</span>U 5'</span>",
+            [
+                "0.134870206",
+                "6.633704526",
+                "9.381443879",
+                "0.239535818",
+                "0"
+            ],
+            "CCUAUUUCUUGUGUUAUUGUU",
+            "00442",
+            0.0
+        ]
+    ],
+    "options": {
+        "core_non_GU": 0,
+        "core_GU": 2,
+        "non_core_non_GU": 2,
+        "non_core_GU": 3,
+        "total": 6,
+        "nematodeType": "C.elegans",
+        "pts": [
+            "false",
+            0
+        ]
+    },
+    "CDS1": 0,
+    "CDS2": 0,
+    "CDS_region": "0 - 0",
+    "Tscore": [
+        7,
+        1.5,
+        2,
+        1.5
+    ]
+}

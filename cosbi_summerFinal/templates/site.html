@@ -1,0 +1,15 @@
+<!-- site.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} piRNA target predict {% endblock %}
+{% block content %}
+<div id="pirScan">
+    <center><div id="svg_container"></div></center>
+    <div id="table_container">
+        <table id="data_table" aria-describedby="originalResult-myTable_info" class="hover display"></table>
+    </div>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="../../static/js/site.js"></script>
+{% endblock %}

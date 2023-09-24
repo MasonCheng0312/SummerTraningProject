@@ -63,17 +63,6 @@ def sequenceJsonDataParser(WBdata: dict) -> tuple[dict, dict]:  # 解析爬回�
     return unspliced_transcriptData, spliced_transcriptData
 
 
-def is_easyCase(
-    unsplicedData: list, splicedData: list
-) -> bool:  # 判斷兩序列的第一組小寫(5'UTR)以及最後一組小寫(3'UTR)是否相同
-    if len(splicedData) == 0:
-        return True
-    else:
-        return (
-            unsplicedData[0] == splicedData[0] and unsplicedData[-1] == splicedData[-1]
-        )
-
-
 def answerParser(
     sequenceData: dict,
 ) -> list[list[tuple[int, int], DataType]]:  # 將json檔中的資料轉換儲存成能用的tuple格式
@@ -100,7 +89,7 @@ def answerParser(
     return sortedData
 
 
-def getCDSInfo(splicedSeq) -> list[tuple[int, int], DataType] :
+def getCDSInfo(splicedSeq: str) -> list[tuple[int, int], DataType] :
     def Find_Location(sequence: str, templates: list) -> list[tuple[int, int]]:
         result = []
         for template in templates:
@@ -180,6 +169,7 @@ def getTransData(request):
             proteinSeq = getProteinInfo(CDS_Seq)
         else:
             proteinSeq = ""
+
         response = {
             "unsplicedData": responseOperater(unsplicedAssortedData),
             "unsplicedSeq": unsplicedSequence,
