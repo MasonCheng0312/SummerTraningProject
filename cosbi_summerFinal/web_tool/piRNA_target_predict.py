@@ -162,24 +162,20 @@ class pirScan:
             return locationTable
 
         def _dicideHeight(locationTable: list[dict]) -> list[dict]:
-            class compareResult(Enum):
-                UNKNOWN = 0,
-                COMPLETE = 1,
-            
+
             for index, record in enumerate(locationTable):
                 heightLevel = 0
-                stateCheck = compareResult.UNKNOWN
-
-                while index != 0 or stateCheck is not compareResult.COMPLETE:
-                    if index == 0:
-                        break
-
-                    index = index - 1
-                    if record["start_point"] > locationTable[index]["start_point"] and record["start_point"] < locationTable[index]["end_point"]:
-                        heightLevel = heightLevel + 1
+                lastIndex = index - 1
+                if index == 0:
+                    heightLevel = 0
+                elif record["start_point"] < locationTable[lastIndex]["end_point"]:                        
+                    checkMiniunma = lastIndex - locationTable[lastIndex]["height_level"]
+                    if record["start_point"] > locationTable[checkMiniunma]["end_point"]:
+                        heightLevel = 0
                     else:
-                        stateCheck = compareResult.COMPLETE
-
+                        heightLevel = locationTable[lastIndex]["height_level"] + 1
+                else:
+                    pass
                 record["height_level"] = heightLevel
 
             return locationTable
@@ -210,13 +206,13 @@ class pirScan:
 
             for index, item in enumerate(location_Table):
                 item["name"] = piRNA_Data[index]["name"]
+                item["mismatchPostion"] = piRNA_Data[index]["mismatchPostion with Tag"]
                 item["seq_tag"] = piRNA_Data[index]["seq tag in target region"]
                 item["score"] = piRNA_Data[index]["score"]
                 item["mismatch"] = piRNA_Data[index]["#mismatch"]
 
             location_Table = sorted(location_Table, key=lambda x:x["start_point"])
             location_Table = _dicideHeight(location_Table)
-            print(location_Table)
             return piRNA_Data, location_Table
 
         response = {}
